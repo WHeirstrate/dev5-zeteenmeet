@@ -6,15 +6,14 @@ services:
     container_name: api
     build: .
     environment:
-      PG_CONNECTION_STRING: "postgress://${POSTGRESS_USER}:${POSTGRESS_PASSWORD}@database:5432/${POSTGRESS_DB}"
+      PG_CONNECTION_STRING: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}"
       PORT: 
     ports:
       - "${PORT}:${PORT}"
 
-
   db:
     container_name: database
-    image: postgress
+    image: postgres
     restart: always
     environment:
       POSTGRESS_PASSWORD: #leave empty to copy from .env file
