@@ -1,16 +1,28 @@
 const express = require('express');
-const http = require('http');
 const pg = require('../config/postgress')
+const parser = require('body-parser')
 
 const app = express();
-http.Server(app);
+
+// -----------------
+// -- MIDDLEWARE ---
+// -----------------
+
+app.use(parser.urlencoded({
+  extended: false
+}));
+app.use(parser.json());
+
+// -----------------
+// ---- ROUTES -----
+// -----------------
 
 app.get('/', (req, res) => {
   res.send('Hello world 2.0');
 })
 
 app.post('/user/add', (req, res) => {
-  console.log(req);
+  console.log(req.body);
   if (req.body.name && req.body.mail && req.body.password) {
     pg
       .insert({
@@ -20,9 +32,9 @@ app.post('/user/add', (req, res) => {
       })
       .into('users')
       .returning('id');
-    res.sendStatus(200)
+    return res.sendStatus(200);
   } else {
-    return res.sendStatus(401)
+    return res.sendStatus(401);
   }
 })
 
