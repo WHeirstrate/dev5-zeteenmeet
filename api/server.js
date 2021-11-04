@@ -1,39 +1,31 @@
 const express = require('express');
 const http = require('http');
-const { knex } = require('knex');
+const pg = require('../config/postgress')
 
-const pg = require('knex')({
-  client: 'pg',
-  connection: process.env.PG_CONNECTION_STRING,
-  searchPath: ['knex', 'public']
-});
 const app = express();
 http.Server(app);
 
-// -------------------
-// --- POSTGRESSQL ----
-// -------------------
-
-knex.schema.createTable('users', (table) => {
-  table.increments('id');
-  table.string('name');
-  table.double('payed');
-  table.double('consumed').defaultTo(0.00);
-  table.timestamps();
-});
-
-const newUserId = knex.insert({name: 'Sniikers', payed: 20.80}).into('users').returning('id');
-console.log(newUserId);
-
-// -------------------
-// ------- API -------
-// -------------------
-
 app.get('/', (req, res) => {
-  res.send('Hello world');
+  res.send('Hello world 2.0');
+})
 
+app.post('/user/add', (req, res) => {
+  console.log(req);
+  if (req.body.name && req.body.mail && req.body.password) {
+    pg
+      .insert({
+        name: req.body.name,
+        mail: req.body.mail,
+        password: req.body.password
+      })
+      .into('users')
+      .returning('id');
+    res.sendStatus(200)
+  } else {
+    return res.sendStatus(401)
+  }
 })
 
 app.listen(process.env.PORT, () => {
-  console.log(`server listening at port ${process.env.PORT}`);
+  console.log(`server listening at: http://localhost:${process.env.PORT}`);
 });
