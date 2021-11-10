@@ -1,6 +1,6 @@
 const express = require('express');
 const pg = require('../config/postgress')
-const parser = require('body-parser')
+const parser = require('body-parser');
 
 const app = express();
 
@@ -18,8 +18,23 @@ app.use(parser.json());
 // -----------------
 
 app.get('/', (req, res) => {
-  res.send('Hello world 2.0');
+  const allUsers = pg.select('*').from('users').then();
+  console.log('allUsers', allUsers);
+  res.send(allUsers);
 })
+
+app.post('/login', (req, res) => {
+  if (req.body.name && req.body.password) {
+    const pass = pg.where({name: req.body.name}).select('password');
+    if (pass == req.body.password) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(401);
+    }
+  } else {
+    res.sendStatus(400);
+  }
+});
 
 app.post('/user/add', (req, res) => {
   console.log(req.body);
