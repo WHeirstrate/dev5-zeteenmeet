@@ -1,0 +1,22 @@
+version: "1.0.2"
+
+services:
+
+  api:
+    container_name: api
+    build: .
+    environment:
+      PG_CONNECTION_STRING: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}"
+      PORT: 
+    ports:
+      - "${PORT}:${PORT}"
+
+  db:
+    container_name: database
+    image: postgres
+    restart: always
+    environment:
+      POSTGRESS_PASSWORD: #leave empty to copy from .env file
+      POSTGRESS_USER: #leave empty to copy from .env file
+      POSTGRESS_DB: #leave empty to copy from .env file
+      POSTGRES_HOST_AUTH_METHOD: #leave empty to copy from .env file
