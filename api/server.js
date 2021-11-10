@@ -1,6 +1,5 @@
 const express = require('express');
 const pg = require('../config/postgress')
-const parser = require('body-parser');
 
 const app = express();
 
@@ -8,19 +7,20 @@ const app = express();
 // -- MIDDLEWARE ---
 // -----------------
 
-app.use(parser.urlencoded({
-  extended: false
+app.use(express.urlencoded({
+  extended: true
 }));
-app.use(parser.json());
+app.use(express.json());
 
 // -----------------
 // ---- ROUTES -----
 // -----------------
 
 app.get('/', (req, res) => {
-  const allUsers = pg.select('*').from('users').then();
-  console.log('allUsers', allUsers);
-  res.send(allUsers);
+  pg.select().from('users')
+    .then((res) => {
+      res.json(res);
+    });
 })
 
 app.post('/login', (req, res) => {
@@ -36,18 +36,19 @@ app.post('/login', (req, res) => {
   }
 });
 
-app.post('/user/add', (req, res) => {
-  console.log(req.body);
+app.post('/user/add', async (req, res) => {
+  console.log('\n', req.body.name, req.body.mail, req.body.password, '\n');
   if (req.body.name && req.body.mail && req.body.password) {
-    pg
+    pg('users')
       .insert({
         name: req.body.name,
         mail: req.body.mail,
         password: req.body.password
       })
-      .into('users')
-      .returning('id');
-    return res.sendStatus(200);
+      .returning('*')
+      .then(user => {
+        res.json(user)
+      });
   } else {
     return res.sendStatus(401);
   }
