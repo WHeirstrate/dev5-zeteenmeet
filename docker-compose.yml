@@ -1,5 +1,3 @@
-version: "1.0.2"
-
 services:
 
   api:
@@ -19,4 +17,4 @@ services:
       POSTGRESS_PASSWORD: #leave empty to copy from .env file
       POSTGRESS_USER: #leave empty to copy from .env file
       POSTGRESS_DB: #leave empty to copy from .env file
-      POSTGRES_HOST_AUTH_METHOD: #leave empty to copy from .env file
+      POSTGRES_HOST_AUTH_METHOD: trust #leave empty to copy from .env file
