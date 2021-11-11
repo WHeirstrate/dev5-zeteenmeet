@@ -6,7 +6,8 @@
     "pg": "^8.7.1"
   },
   "scripts": {
-    "start": "node ./api/server.js"
+    "start": "node api/server.js",
+    "migrate": "node config/migrate.js"
   },
   "name": "dev5-zeteenmeet",
   "description": "",
