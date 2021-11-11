@@ -1,5 +1,6 @@
 const express = require('express');
 const pg = require('../config/postgress')
+const PORT = 5000 || env.process.PORT;
 
 const app = express();
 
@@ -18,8 +19,8 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   pg.select().from('users')
-    .then((res) => {
-      res.json(res);
+    .then(data => {
+      res.json(data);
     });
 })
 
@@ -37,7 +38,7 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/user/add', async (req, res) => {
-  console.log('\n', req.body.name, req.body.mail, req.body.password, '\n');
+  console.log('\n', req.body, '\n');
   if (req.body.name && req.body.mail && req.body.password) {
     pg('users')
       .insert({
@@ -47,7 +48,7 @@ app.post('/user/add', async (req, res) => {
       })
       .returning('*')
       .then(user => {
-        res.json(user)
+        res.json(user);
       });
   } else {
     return res.sendStatus(401);
@@ -55,5 +56,5 @@ app.post('/user/add', async (req, res) => {
 })
 
 app.listen(process.env.PORT, () => {
-  console.log(`server listening at: http://localhost:${process.env.PORT}`);
+  console.log(`server listening at: http://localhost:${PORT}`);
 });
