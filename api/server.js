@@ -1,6 +1,6 @@
 const express = require('express');
 const pg = require('../config/postgress')
-const PORT = 5000 || env.process.PORT;
+
 
 const app = express();
 
@@ -165,6 +165,4 @@ app.get('/organisations', (req, res) => {
     .then(data => res.json(data));
 })
 
-app.listen(process.env.PORT, () => {
-  console.log(`server listening at: http://localhost:${PORT}`);
-});
+module.exports = app;
