@@ -1,5 +1,5 @@
 const express = require('express');
-const pg = require('../config/postgress')
+const pg = require('./config/postgress')
 
 
 const app = express();
