@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 app.get('/users', (req, res) => {
   pg.select()
     .from('users')
-    .then(data => res.json(data));
+    .then(data => res.status(200).json(data));
 })
 
 /**
