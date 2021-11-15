@@ -7,6 +7,7 @@ Voor het vak **Development 5** aan de [Erasmushogeschool Brussel](https://www.er
 * [Classed - # Docker Tutorial (+ Node & Postgres setup)](https://www.youtube.com/watch?v=Dm0CmZz-QyI&t=1812s&ab_channel=Classsed)
 * [Ahmed - classsed docker tutorial](https://github.com/hidjou/classsed-docker-tutorial)
 * [Adam Pritchard - Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+ * [rnevius - How to validate an email address in JavaScript](https://stackoverflow.com/a/46181)
 
 ## License
 
