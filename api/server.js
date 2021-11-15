@@ -1,4 +1,5 @@
 const EXPRESS = require('express');
+const { checkAddUserBody } = require('./config/helpers/helper');
 const PG = require('./config/postgress')
 
 const APP = EXPRESS();
@@ -64,7 +65,7 @@ APP.get('/users', (req, res) => {
  * statuscode 401 will be returned.
  */
 APP.post('/users', async (req, res) => {
-  if (req.body.name && req.body.email && req.body.password) {
+  if (checkAddUserBody(req.body)) {
     PG('users')
     .insert({
       name: req.body.name,
@@ -76,7 +77,7 @@ APP.post('/users', async (req, res) => {
       return res.status(200).send(data);
     });
   } else {
-    return res.status(401).send('Invalid data');
+    return res.status(400).send('Invalid data');
   }
 });
 
@@ -109,7 +110,7 @@ APP.post('/users/login', (req, res) => {
       return res.status(401).send('Email is incorrect');
     }
   } else {
-    return res.status(401).send('Invalid data');
+    return res.status(400).send('Invalid data');
   }
 });
 
@@ -162,7 +163,7 @@ APP.delete('/users/:id', (req, res) => {
         return res.status(200).send('User deleted succesfully');
       });
   } catch(err) {
-    return res.status(400).send('There is no user with this id');
+    return res.status(401).send('There is no user with this id');
   }
 });
 
