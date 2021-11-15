@@ -1,17 +1,16 @@
-const express = require('express');
-const pg = require('./config/postgress')
+const EXPRESS = require('express');
+const PG = require('./config/postgress')
 
-
-const app = express();
+const APP = EXPRESS();
 
 // -----------------
 // -- MIDDLEWARE ---
 // -----------------
 
-app.use(express.urlencoded({
+APP.use(EXPRESS.urlencoded({
   extended: true
 }));
-app.use(express.json());
+APP.use(EXPRESS.json());
 
 // -----------------
 // ---- ROUTES -----
@@ -19,10 +18,10 @@ app.use(express.json());
 
 /**
  * The main route of the API, this will be linked with the documentation
- * once the app is in a further developed stadium. For now, this just
+ * once the APP is in a further developed stadium. For now, this just
  * returns a sole sentence.
  */
-app.get('/', (req, res) => {
+APP.get('/', (req, res) => {
   res.send('Welcome, RESTful api is running');
 })
 
@@ -34,8 +33,8 @@ app.get('/', (req, res) => {
  * Fetch all users from the 'users' table.
  * @returns {Object} - A JSON-object with all users will be returned.
  */
-app.get('/users', (req, res) => {
-  pg.select()
+APP.get('/users', (req, res) => {
+  PG.select()
     .from('users')
     .then(data => res.status(200).json(data));
 })
@@ -51,10 +50,10 @@ app.get('/users', (req, res) => {
  * wrong credentials were used and 400 when the request doesn't contain at least
  * an email and a password.
  */
-app.post('/users/login', (req, res) => {
+APP.post('/users/login', (req, res) => {
   if (req.body.mail && req.body.password) {
     try {
-      const pass = pg.where({mail: req.body.mail}).returning('password');
+      const pass = PG.where({mail: req.body.mail}).returning('password');
       if (pass == req.body.password) {
         res.sendStatus(200);
       } else {
@@ -78,10 +77,10 @@ app.post('/users/login', (req, res) => {
  * updated, a status 401 is returned. if the wrong params were passed, a status
  * 400 will be returned.
  */
-app.put('/users/:id', (req, res) => {
+APP.put('/users/:id', (req, res) => {
   if(req.body.payed && req.body.consumed) {
     try {
-      pg('users')
+      PG('users')
         .where('id', req.params.id)
         .update({
           payed: req.body.payed,
@@ -105,9 +104,9 @@ app.put('/users/:id', (req, res) => {
  * the user could not be deleted.
  */
 
-app.delete('/users/:id', (req, res) => {
+APP.delete('/users/:id', (req, res) => {
   try {
-    pg('users')
+    PG('users')
       .where('id', req.params.id)
       .del()
       .then(()=> res.sendStatus(200));
@@ -133,10 +132,10 @@ app.delete('/users/:id', (req, res) => {
  * @returns {Object} - The user that has been added. If this was unsuccesful, a 
  * statuscode 401 will be returned.
  */
-app.post('/users/add', async (req, res) => {
+APP.post('/users/add', async (req, res) => {
   console.log('\n', req.body, '\n');
   if (req.body.name && req.body.mail && req.body.password) {
-    pg('users')
+    PG('users')
     .insert({
       name: req.body.name,
       mail: req.body.mail,
@@ -159,10 +158,10 @@ app.post('/users/add', async (req, res) => {
  * Fetch all organisations from the 'organisations' table.
  * @returns {Object} - A JSON-object with all organisations will be returned.
  */
-app.get('/organisations', (req, res) => {
-  pg.select()
+APP.get('/organisations', (req, res) => {
+  PG.select()
     .from('organisations')
     .then(data => res.json(data));
 })
 
-module.exports = app;
+module.exports = APP;
