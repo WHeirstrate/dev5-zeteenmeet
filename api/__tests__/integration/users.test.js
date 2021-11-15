@@ -3,7 +3,9 @@ const SUPERTEST = require('supertest');
 const PG = require('../../config/postgress')
 const REQUEST = SUPERTEST(APP);
 
-// A user that will be inserted into the DB.
+/**
+  * Some users that will be inserted into the DB.
+  */
 const user1 = {
   id: 1,
   name: 'Wouter',
@@ -15,7 +17,6 @@ const user1 = {
   updated_at: null,
 };
 
-// A user that will be inserted into the DB.
 const user2 = {
   id: 2,
   name: 'Charel',
@@ -33,7 +34,10 @@ const user3 = {
   email: 'geert@mail.be',
   password: 'GeertIsDeBeste1',
 }
-// Add two users to the database everytime the test is ran
+ /** 
+  * Add two users to the database everytime the test is ran, after clearing the
+  * database of leftover users
+  */
 beforeAll(async () => {
   await PG('users').del();
   await PG('users').insert(user1);
@@ -61,9 +65,11 @@ describe('Endpoint "/"', () => {
 });
 
 describe('Endpoint "/users"', () => {
-  //-----------
-  //--- GET ---
-  //-----------
+  /**
+   * -----------
+   * --- GET ---
+   * -----------
+   */
   //#region 
   it('should reach GET /users endpoint', (done) => {
     REQUEST
@@ -107,9 +113,11 @@ describe('Endpoint "/users"', () => {
       });
   });
   //#endregion
-  //-----------
-  //-- POST ---
-  //-----------
+  /**
+   * -----------
+   * -- POST ---
+   * -----------
+   */
   //#region 
   it('should reach POST /user endpoint', (done) => {
     REQUEST
@@ -144,9 +152,11 @@ describe('Endpoint "/users"', () => {
       });
   });
   //#endregion
-  //-----------
-  //--- PUT ---
-  //-----------
+  /**
+   * -----------
+   * --- PUT ---
+   * -----------
+   */
   //#region 
   it('should reach PUT /user/1 endoint', (done) => {
     REQUEST
@@ -161,9 +171,11 @@ describe('Endpoint "/users"', () => {
       });
   });
   //#endregion
-  //-----------
-  //- DELETE --
-  //-----------
+  /**
+   * -----------
+   * - DELETE --
+   * -----------
+   */
   //#region
   it('should reach DELETE /user/700 endpoint', (done) => {
     REQUEST
@@ -196,7 +208,9 @@ describe('Endpoint "/users"', () => {
 
 });
 
-// Delete the users-table after the test are ran.
+/**
+ * Delete the users-table after the test are ran.
+ */
 afterAll(async () => {
   try {
     PG.destroy();
