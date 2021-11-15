@@ -35,6 +35,7 @@ const user3 = {
 }
 // Add two users to the database everytime the test is ran
 beforeAll(async () => {
+  await PG('users').del();
   await PG('users').insert(user1);
   await PG('users').insert({
     id: 2,
@@ -63,6 +64,7 @@ describe('Endpoint "/users"', () => {
   //-----------
   //--- GET ---
   //-----------
+  //#region 
   it('should reach GET /users endpoint', (done) => {
     REQUEST
       .get('/users')
@@ -104,13 +106,15 @@ describe('Endpoint "/users"', () => {
         }
       });
   });
+  //#endregion
   //-----------
   //-- POST ---
   //-----------
+  //#region 
   it('should reach POST /user endpoint', (done) => {
     REQUEST
       .post('/users')
-      .expect(401)
+      .expect(400)
       .end((err, res) => {
         try {
           done();
@@ -122,7 +126,32 @@ describe('Endpoint "/users"', () => {
   it('should add user', (done) => {
     REQUEST
       .post('/users')
+      .send(user3)
       .expect(200)
+      .end((err, res) => {
+        try {
+          expect(res.body[0]).toHaveProperty('consumed');
+          expect(res.body[0]).toHaveProperty('payed');
+          expect(res.body[0]).toHaveProperty('created_at');
+          expect(res.body[0]).toHaveProperty('updated_at');
+          expect(res.body[0].name).toEqual("Geert");
+          expect(res.body[0].email).toEqual("geert@mail.be");
+          expect(res.body[0].password).toEqual("GeertIsDeBeste1");
+          done();
+        } catch(err) {
+          done(err)
+        }
+      });
+  });
+  //#endregion
+  //-----------
+  //--- PUT ---
+  //-----------
+  //#region 
+  it('should reach PUT /user/1 endoint', (done) => {
+    REQUEST
+      .put('/users/1')
+      .expect(401)
       .end((err, res) => {
         try {
           done();
@@ -131,10 +160,47 @@ describe('Endpoint "/users"', () => {
         }
       });
   });
+  //#endregion
+  //-----------
+  //- DELETE --
+  //-----------
+  //#region
+  it('should reach DELETE /user/700 endpoint', (done) => {
+    REQUEST
+      .delete('/users/700')
+      .expect(401)
+      .end((err, res) => {
+        try {
+          done();
+        } catch(err) {
+          done(err);
+        }
+      });
+  });
+  it('should delete /user/3 endpoint', (done) => {
+    REQUEST
+      .delete('/users/3')
+      .expect(200)
+      .end((err, res) => {
+        try {
+          PG('users').where('id', 3).then(data => {
+            expect(data).toEqual([]);
+            done()
+          })
+        } catch(err) {
+          done(err);
+        }
+      });
+  });
+  //#endregion
+
 });
 
 // Delete the users-table after the test are ran.
 afterAll(async () => {
-  await PG('users')
-    .del();
+  try {
+    PG.destroy();
+  } catch (err) {
+    console.log(err);
+  }
 });
