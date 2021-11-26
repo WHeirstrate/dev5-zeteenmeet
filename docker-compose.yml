@@ -26,9 +26,3 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
-  watchtower:
-    image: containrrr/watchtower
-    command: "--interval 60 --cleanup"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
