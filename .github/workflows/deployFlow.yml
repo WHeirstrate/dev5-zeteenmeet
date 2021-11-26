@@ -30,4 +30,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Publish
-        run: docker-compose build
+        run: docker-compose push
