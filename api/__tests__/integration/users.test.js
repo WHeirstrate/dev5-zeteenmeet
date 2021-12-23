@@ -34,6 +34,7 @@ const user3 = {
   email: "geert@mail.be",
   password: "GeertIsDeBeste1",
 };
+
 /**
  * Add two users to the database everytime the test is ran, after clearing the
  * database of leftover users
@@ -115,7 +116,7 @@ describe('Endpoint "/users"', () => {
    * -----------
    */
   //#region
-  it("should reach POST /user endpoint", (done) => {
+  it("should reach POST /users endpoint", (done) => {
     REQUEST.post("/users")
       .expect(400)
       .end((err, res) => {
@@ -146,6 +147,9 @@ describe('Endpoint "/users"', () => {
       });
   });
   //#endregion
+});
+
+describe('Endpoint "/users/:id"', () => {
   /**
    * -----------
    * --- PUT ---
