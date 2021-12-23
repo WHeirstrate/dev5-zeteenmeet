@@ -14,6 +14,7 @@ const organisation2 = {
   name: "Scouts",
   rate: 0.5,
 };
+
 beforeAll(async () => {
   // Add one organisationn to the database everytime the test is run
   await PG("organisations").insert(organisation1);
@@ -26,7 +27,8 @@ describe('Endpoint "/organisations"', () => {
   //-----------
   //--- GET ---
   //-----------
-  it("should reach GET /users endpoint", (done) => {
+  //#region
+  it("should reach /organisations endpoint", (done) => {
     REQUEST.get("/organisations")
       .expect(200)
       .end((err, res) => {
