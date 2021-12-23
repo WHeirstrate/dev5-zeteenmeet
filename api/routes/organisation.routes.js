@@ -1,4 +1,7 @@
+const { organisationExists } = require("../helpers/helper");
 const PG = require("../config/postgress");
+const EXPRESS = require("express");
+const ORGANISATIONROUTER = EXPRESS.Router();
 
 /**
  * GET
@@ -14,6 +17,60 @@ const getAllOrganisations = (req, res) => {
     });
 };
 
-module.exports = {
-  getAllOrganisations,
+/**
+ * POST
+ *
+ * Add a new organisation to the 'organisations' table. Every request should
+ * contain certain params, and some are optional that default to 0.5.
+ *
+ * @param name The name of the new organisation that will be added.
+ * @param rate (optional) rate (in euros) that will be charged when a new
+ * consumption has been added. Defaults to 0.50 (euro).
+ * @returns {JSON} The user that has been added. If this was unsuccesful, a
+ * statuscode 401 will be returned.
+ */
+const addOrganisation = (req, res) => {
+  PG("organisations")
+    .insert({
+      name: req.body.name,
+      rate: req.body.rate || 0.5,
+    })
+    .returning("*")
+    .then((data) => {
+      return res.status(200).send(data);
+    });
+
+  //PG("organisations").insert({});
 };
+
+/**
+ * DELETE
+ *
+ * Delete an organistion with the specified id (in the uri).
+ * @param id - must be added in the request uri
+ * @returns {StatusCode} 200 when the user has succesfully been removed, 400 when
+ * the user could not be deleted.
+ */
+const deleteOrganisation = (req, res) => {
+  if (!organisationExists(PG, req.params.id))
+    return res.status(401).send("There is no organisation with this id");
+  try {
+    PG("organisations")
+      .where("id", req.params.id)
+      .del()
+      .then(() => {
+        return res.status(200).send("Organisation deleted succesfully");
+      });
+  } catch (err) {
+    return res.status(400).send("Something went wrong", err);
+  }
+};
+
+ORGANISATIONROUTER.route("/")
+  .get((req, res) => getAllOrganisations(req, res))
+  .post((req, res) => addOrganisation(req, res));
+ORGANISATIONROUTER.route("/:id").delete((req, res) =>
+  deleteOrganisation(req, res)
+);
+
+module.exports = ORGANISATIONROUTER;
