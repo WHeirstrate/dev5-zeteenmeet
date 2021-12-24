@@ -10,8 +10,6 @@
   },
   "scripts": {
     "start": "node index.js",
-    "migrate": "node config/migrate.js",
-    "seed": "node config/seed.js",
     "test": "jest --watchAll --detectOpenHandles",
     "test-ci": "jest --ci --detectOpenHandles --forceExit"
   },

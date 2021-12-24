@@ -7,18 +7,16 @@ const REQUEST = SUPERTEST(APP);
  * Some users that will be inserted into the DB.
  */
 const user1 = {
-  id: 1,
   name: "Wouter",
   email: "wouter.heirstrate@student.ehb.be",
   password: "HeirstrateWouter12",
-  consumed: 0,
-  payed: 0,
+  consumed: 5,
+  payed: 12,
   created_at: null,
   updated_at: null,
 };
 
 const user2 = {
-  id: 2,
   name: "Charel",
   email: "Chareltje007@student.ehb.be",
   password: "Chareltje007",
@@ -29,11 +27,11 @@ const user2 = {
 };
 
 const user3 = {
-  id: 3,
   name: "Geert",
   email: "geert@mail.be",
   password: "GeertIsDeBeste1",
 };
+
 /**
  * Add two users to the database everytime the test is ran, after clearing the
  * database of leftover users
@@ -42,7 +40,6 @@ beforeAll(async () => {
   await PG("users").del();
   await PG("users").insert(user1);
   await PG("users").insert({
-    id: 2,
     name: "Charel",
     email: "Chareltje007@student.ehb.be",
     password: "Chareltje007",
@@ -81,6 +78,7 @@ describe('Endpoint "/users"', () => {
         }
       });
   });
+
   it("should return exactly 2 users", (done) => {
     REQUEST.get("/users")
       .expect(200)
@@ -93,15 +91,46 @@ describe('Endpoint "/users"', () => {
         }
       });
   });
-  // The collumns 'consumed', 'payed', 'created_at' and 'updated_at' should
-  // have been added by PostgreSQL.
-  it("should return the correct users with added data", (done) => {
+
+  it("should return the correct users with correct properties", (done) => {
     REQUEST.get("/users")
       .expect(200)
       .end((err, res) => {
         try {
-          expect(res.body[0]).toEqual(user1);
-          expect(res.body[1]).toEqual(user2);
+          expect(res.body[0] && res.body[1]).toHaveProperty("id");
+          expect(res.body[0] && res.body[1]).toHaveProperty("name");
+          expect(res.body[0] && res.body[1]).toHaveProperty("email");
+          expect(res.body[0] && res.body[1]).toHaveProperty("password");
+          expect(res.body[0] && res.body[1]).toHaveProperty("consumed");
+          expect(res.body[0] && res.body[1]).toHaveProperty("payed");
+          expect(res.body[0] && res.body[1]).toHaveProperty("created_at");
+          expect(res.body[0] && res.body[1]).toHaveProperty("updated_at");
+          expect(res.body[0] && res.body[1]).toHaveProperty("uuid");
+
+          done();
+        } catch (err) {
+          done(err);
+        }
+      });
+  });
+
+  it("should return the correct users with correct data", (done) => {
+    REQUEST.get("/users")
+      .expect(200)
+      .end((err, res) => {
+        try {
+          expect(res.body[0].name).toEqual("Wouter");
+          expect(res.body[0].email).toEqual("wouter.heirstrate@student.ehb.be");
+          expect(res.body[0].password).toEqual("HeirstrateWouter12");
+          expect(res.body[0].consumed).toEqual(5);
+          expect(res.body[0].payed).toEqual(12);
+
+          expect(res.body[1].name).toEqual(user2.name);
+          expect(res.body[1].email).toEqual(user2.email);
+          expect(res.body[1].password).toEqual(user2.password);
+          expect(res.body[1].consumed).toEqual(user2.consumed);
+          expect(res.body[1].payed).toEqual(user2.payed);
+
           done();
         } catch (err) {
           done(err);
@@ -115,7 +144,7 @@ describe('Endpoint "/users"', () => {
    * -----------
    */
   //#region
-  it("should reach POST /user endpoint", (done) => {
+  it("should reach POST /users endpoint", (done) => {
     REQUEST.post("/users")
       .expect(400)
       .end((err, res) => {
@@ -146,6 +175,9 @@ describe('Endpoint "/users"', () => {
       });
   });
   //#endregion
+});
+
+describe('Endpoint "/users/:id"', () => {
   /**
    * -----------
    * --- PUT ---
@@ -205,6 +237,7 @@ describe('Endpoint "/users"', () => {
  */
 afterAll(async () => {
   try {
+    PG("users").select("*").del();
     PG.destroy();
   } catch (err) {
     console.log(err);
