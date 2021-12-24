@@ -23,7 +23,7 @@ Indien de API connectie faalt in Docker, gelieve het commando '''docker-compose 
 ```
 
 ```javascript
-  [POST] /users // Add a new user with the following params in the body:
+[POST] /users // Add a new user with the following params in the body:
   {
 	"name": "Tom Davies",
 	"email": "tom.davies@gmail.com",
@@ -34,15 +34,15 @@ Indien de API connectie faalt in Docker, gelieve het commando '''docker-compose 
 ```
 
 ```javascript
-  [PUT] /users/:id // Update an existing user by id with the following body:
+[PUT] /users/:id // Update an existing user by id with the following body:
   {
-	  "payed": 3,
-	  "consumed": 2
+	"payed": 3,
+	"consumed": 2
   }
 ```
 
 ```javascript
-  [DELETE] /users/:id // Deletes the user by id
+[DELETE] /users/:id // Deletes the user by id
 ```
 
 ### Organisations
@@ -52,22 +52,22 @@ Indien de API connectie faalt in Docker, gelieve het commando '''docker-compose 
 ```
 
 ```javascript
-  [POST] /organisations // Add a new organisation with the following params in the body:
+[POST] /organisations // Add a new organisation with the following params in the body:
   {
-	  "name": "Tom Davies",
-	  "rate": 1.2 [optional, default 0.5]
+	"name": "Tom Davies",
+	"rate": 1.2 [optional, default 0.5]
   }
 ```
 
 ```javascript
-  [PUT] /organisations/:id // Update an existing organisation by id with the following body:
+[PUT] /organisations/:id // Update an existing organisation by id with the following body:
   {
-	  "rate": 0.6
+	"rate": 0.6
   }
 ```
 
 ```javascript
-  [DELETE] /organisations/:id // Deletes the organisation by id
+[DELETE] /organisations/:id // Deletes the organisation by id
 ```
 
 ## Bronnen
