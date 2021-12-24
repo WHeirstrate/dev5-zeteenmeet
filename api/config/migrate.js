@@ -6,7 +6,6 @@
  * @param {*} PG - A postgres connection instance.
  */
 async function createDbTables(PG) {
-  //console.log('migration started');
   try {
     PG.schema.hasTable("users").then(async (exists) => {
       if (!exists) {
@@ -21,14 +20,8 @@ async function createDbTables(PG) {
             //.references("id")
             //.inTable("organisations")
             //.onDelete("RESTRICT");
-            tbl.string("name").notNullable().unique({
-              indexName: "user_unique_name",
-              deferrable: "immediate",
-            });
-            tbl.string("email").unique().notNullable().unique({
-              indexName: "user_unique_email",
-              deferrable: "immediate",
-            });
+            tbl.string("name").notNullable();
+            tbl.string("email").unique().notNullable();
             tbl.string("password").notNullable();
             tbl.double("payed").notNullable().defaultTo(0.0);
             tbl.double("consumed").notNullable().defaultTo(0.0);
@@ -36,22 +29,17 @@ async function createDbTables(PG) {
           });
       }
     });
-    //console.log('Created users table!');
     PG.schema.hasTable("organisations").then(async (exists) => {
       if (!exists) {
         return await PG.schema
           .withSchema("public")
           .createTable("organisations", (tbl) => {
             tbl.increments("id").primary();
-            tbl.string("name").notNullable().unique({
-              indexName: "organisation_unique_email",
-              deferrable: "immediate",
-            });
+            tbl.string("name").notNullable();
             tbl.double("rate").notNullable().defaultTo(0.5);
           });
       }
     });
-    //console.log('Created organisations table!');
   } catch (err) {
     console.log(err);
     process.exit(1);
