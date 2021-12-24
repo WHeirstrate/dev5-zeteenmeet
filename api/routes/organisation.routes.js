@@ -44,6 +44,36 @@ const addOrganisation = (req, res) => {
 };
 
 /**
+ * PUT
+ *
+ * Update an organisation by id (passed in the uri) with the parameters that get passed
+ * in the body.
+ * @param rate The rate at which a consumption will be charged.
+ * @returns {JSON} The user that was updated. If the user was unable to be
+ * updated, a status 401 is returned. if the wrong params were passed, a status
+ * 400 will be returned.
+ */
+const updateOrganisation = (req, res) => {
+  if (req.body.rate) {
+    try {
+      PG("organisations")
+        .where("id", req.params.id)
+        .update({
+          rate: req.body.rate,
+        })
+        .returning("*")
+        .then((data) => {
+          return res.status(200).json(data);
+        });
+    } catch (err) {
+      return res.status(401).send("There is no organisation with this id");
+    }
+  } else {
+    return res.status(400).send("Invalid data");
+  }
+};
+
+/**
  * DELETE
  *
  * Delete an organistion with the specified id (in the uri).
@@ -69,8 +99,8 @@ const deleteOrganisation = (req, res) => {
 ORGANISATIONROUTER.route("/")
   .get((req, res) => getAllOrganisations(req, res))
   .post((req, res) => addOrganisation(req, res));
-ORGANISATIONROUTER.route("/:id").delete((req, res) =>
-  deleteOrganisation(req, res)
-);
+ORGANISATIONROUTER.route("/:id")
+  .put((req, res) => updateOrganisation(req, res))
+  .delete((req, res) => deleteOrganisation(req, res));
 
 module.exports = ORGANISATIONROUTER;
