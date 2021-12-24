@@ -59,12 +59,11 @@ function userExists(PG, id) {
     return PG("users")
       .where("id", id)
       .then((user) => {
-        if (!user) return false;
+        if (!user.length) return false;
         return true;
       });
   } catch (err) {
     console.log("An error occured:", err);
-    return false;
   }
 }
 
@@ -80,11 +79,8 @@ function organisationExists(PG, id) {
     return PG("organisations")
       .where("id", id)
       .then((organisation) => {
-        if (!organisation.length) {
-          return false;
-        } else {
-          return true;
-        }
+        if (!organisation.length) return false;
+        return true;
       });
   } catch (err) {
     console.log("An error occured:", err);
