@@ -6,13 +6,29 @@ Voor het vak **Development 5** aan de [Erasmushogeschool Brussel](https://www.er
 
 ## Setup
 
-1. Pull branch temp/tussentijds
-2. .env.template copiëren naar een persoonlijke .env-file (top-level)
-3. Voer het commando ''' docker-compose up --build ''' uit.
-4. Navigeer naar de /api en voer het commando ''' npm i ''' uit om de benodigde packages te installeren.
-5. Voer het commando ''' npm test ''' uit in de /api map.
+1. Pull branch main
+2. .env.template copiëren naar een persoonlijke .env file (top-level)
+3. Voer het volgende commando uit:
+
+```node
+docker-compose up --build
+```
+
+4. Navigeer naar de /api en voer het volgende commando uit om de benodigde packages te installeren:
+
+```node
+npm i
+```
+
+5. Voer het volgende commando uit in de /api map:
+
+```node
+npm test
+```
 
 Indien de API connectie faalt in Docker, gelieve het commando '''docker-compose up --build''' opnieuw uit te voeren zonder de container te verwijderen.
+
+Note: zonder de end-to-end test slagen alle testen wel.
 
 ## Endpoints
 
