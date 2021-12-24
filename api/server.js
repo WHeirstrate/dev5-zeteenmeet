@@ -2,7 +2,7 @@ const EXPRESS = require("express");
 //const { checkAddUserBody } = require('./config/helpers/helper');
 //const PG = require('./config/postgress')
 const USERROUTER = require("./routes/user.routes");
-const ORGANISATIONROUTES = require("./routes/organisation.routes");
+const ORGANISATIONROUTER = require("./routes/organisation.routes");
 
 const APP = EXPRESS();
 
@@ -36,6 +36,6 @@ APP.use("/users", USERROUTER);
 // - ORGANISATIONS -
 // -----------------
 
-APP.get("/organisations", ORGANISATIONROUTES.getAllOrganisations);
+APP.use("/organisations", ORGANISATIONROUTER);
 
 module.exports = APP;

@@ -1,4 +1,4 @@
-const { checkAddUserBody } = require("../config/helpers/helper");
+const { checkAddUserBody, userExists } = require("../helpers/helper");
 const PG = require("../config/postgress");
 const EXPRESS = require("express");
 const USERROUTER = EXPRESS.Router();
@@ -128,6 +128,8 @@ const updateUser = (req, res) => {
  * the user could not be deleted.
  */
 const deleteUser = (req, res) => {
+  if (!userExists(PG, req.params.id))
+    return res.status(401).send("There is no user with this id");
   try {
     PG("users")
       .where("id", req.params.id)
@@ -136,7 +138,7 @@ const deleteUser = (req, res) => {
         return res.status(200).send("User deleted succesfully");
       });
   } catch (err) {
-    return res.status(401).send("There is no user with this id");
+    return res.status(400).send("Something went wrong");
   }
 };
 

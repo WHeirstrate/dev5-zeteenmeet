@@ -1,22 +1,97 @@
 # Dev5 course project!
 
-Voor het vak **Development 5** aan de [Erasmushogeschool Brussel](https://www.erasmushogeschool.be/nl) heb ik een project moeten maken dat een (relationele) databank en een REST-full API met elkaar verbindt aan de hand van Docker. 
+Voor het vak **Development 5** aan de [Erasmushogeschool Brussel](https://www.erasmushogeschool.be/nl) heb ik een project moeten maken dat een (relationele) databank en een REST-full API met elkaar verbindt aan de hand van Docker.
+
 <hr>
 
 ## Setup
-1. Pull branch temp/tussentijds
-2. .env.template copiëren naar een persoonlijke .env-file (top-level)
-3. Voer het commando ''' docker-compose up --build ''' uit.
-4. Navigeer naar de /api en voer het commando ''' npm i ''' uit om de benodigde packages te installeren.
-5. Voer het commando ''' npm test ''' uit in de /api map.
+
+1. Pull branch main
+2. .env.template copiëren naar een persoonlijke .env file (top-level)
+3. Voer het volgende commando uit:
+
+```node
+docker-compose up --build
+```
+
+4. Navigeer naar de /api en voer het volgende commando uit om de benodigde packages te installeren:
+
+```node
+npm i
+```
+
+5. Voer het volgende commando uit in de /api map:
+
+```node
+npm test
+```
 
 Indien de API connectie faalt in Docker, gelieve het commando '''docker-compose up --build''' opnieuw uit te voeren zonder de container te verwijderen.
 
+Note: zonder de end-to-end test slagen alle testen wel.
+
+## Endpoints
+
+### Users
+
+```javascript
+[GET] / users; // Returns all users from the database
+```
+
+```javascript
+[POST] /users // Add a new user with the following params in the body:
+  {
+	"name": "Tom Davies",
+	"email": "tom.davies@gmail.com",
+	"password": "tomdavies123",
+	"payed": 5 [optional, default 0],
+	"consumed": 3 [optional, default 0]
+  }
+```
+
+```javascript
+[PUT] /users/:id // Update an existing user by id with the following body:
+  {
+	"payed": 3,
+	"consumed": 2
+  }
+```
+
+```javascript
+[DELETE] /users/:id // Deletes the user by id
+```
+
+### Organisations
+
+```javascript
+[GET] / organisations; // Returns all organisations from the database
+```
+
+```javascript
+[POST] /organisations // Add a new organisation with the following params in the body:
+  {
+	"name": "Tom Davies",
+	"rate": 1.2 [optional, default 0.5]
+  }
+```
+
+```javascript
+[PUT] /organisations/:id // Update an existing organisation by id with the following body:
+  {
+	"rate": 0.6
+  }
+```
+
+```javascript
+[DELETE] /organisations/:id // Deletes the organisation by id
+```
+
 ## Bronnen
-* [Classed - # Docker Tutorial (+ Node & Postgres setup)](https://www.youtube.com/watch?v=Dm0CmZz-QyI&t=1812s&ab_channel=Classsed)
-* [Ahmed - classsed docker tutorial](https://github.com/hidjou/classsed-docker-tutorial)
-* [Adam Pritchard - Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
- * [rnevius - How to validate an email address in JavaScript](https://stackoverflow.com/a/46181)
+
+- [Classed - # Docker Tutorial (+ Node & Postgres setup)](https://www.youtube.com/watch?v=Dm0CmZz-QyI&t=1812s&ab_channel=Classsed)
+- [Ahmed - classsed docker tutorial](https://github.com/hidjou/classsed-docker-tutorial)
+- [Adam Pritchard - Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+- [rnevius - How to validate an email address in JavaScript](https://stackoverflow.com/a/46181)
 
 ## License
 
